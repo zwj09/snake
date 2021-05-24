@@ -1,7 +1,7 @@
 <template>
   <div class="home">
 		<div>贪吃蛇</div>
-   <canvas ref="game" width="300" height="300">	</canvas>
+   <canvas ref="game" width="500" height="500">	</canvas>
 	 <!-- 开始游戏按钮 -->
 	 <div>
 		 <button v-if="!starting" @click="startGame">开始游戏</button>
@@ -42,6 +42,7 @@ export default {
 			speedX:10,
 			speedY:0,
 			food:{x:0, y:0},
+			foodArr:[],
 			timer:{},
 			starting:false,
 		}
@@ -55,6 +56,7 @@ export default {
 				this.drawFood();
 				this.advanceSnake();
 				this.drawSnake();
+						this.drawFoodArr();
 			},100)
 		},
 		//暂停游戏
@@ -91,6 +93,14 @@ export default {
 				}else{
 					this.snake.pop();
 				}
+				this.snake.find((body,index)=>{
+					if((head.x===body.x && head.y===body.y)&&index>2){
+						this.foodArr = this.foodArr.concat(this.snake.slice(index));
+						this.snake = this.snake.slice(0, index);
+						
+					}
+					return (head.x===body.x && head.y===body.y)&&index>2
+				})
 		},
 		//更改食物的位置
 		addFood(){
@@ -103,6 +113,15 @@ export default {
 		},
 		randomTen(max,min){
 			return Math.round((Math.random() * (max-min) + min) / 10) * 10;
+		},
+		//画蛇尸体
+		drawFoodArr(){
+			this.foodArr.forEach(food=>{
+				this.context.fillStyle = 'red';
+				this.context.strokeStyle = 'darkred';
+				this.context.fillRect(food.x, food.y, 10, 10);
+				this.context.strokeRect(food.x, food.y, 10, 10);
+			})
 		},
 		//画食物
 		drawFood(){
