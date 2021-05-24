@@ -13,6 +13,8 @@
 <script>
 export default {
   mounted() {
+		//监听键盘事件
+		document.addEventListener("keydown",this.changeDirection);
 		const CANVAS_BORDER_COLOR = 'black';
 		const CANVAS_BACKGROUND_COLOR = 'white';
 		console.log(this.$refs.game);
@@ -116,8 +118,32 @@ export default {
 			this.context.fillRect(0, 0,this.game.width,this.game.height);
 			this.context.strokeRect(0, 0,this.game.width,this.game.height);
 		},
-		up(){
-			console.log('upupup');
+		changeDirection(event){
+			const LEFT_KEY = 37;
+			const RIGHT_KEY = 39;
+			const UP_KEY = 38;
+			const DOWN_KEY = 40;
+			const keyPressed = event.keyCode;
+			const goingUp = this.speedY === -10;
+			const goingDown = this.speedY === 10;
+			const goingRight = this.speedX === 10;
+			const goingLeft = this.speedX === -10;
+			if(keyPressed === LEFT_KEY && !goingRight){
+				this.speedX = -10;
+				this.speedY = 0;
+			}
+			if(keyPressed === UP_KEY && !goingDown){
+				this.speedX = 0;
+				this.speedY = -10;
+			}
+			if(keyPressed === RIGHT_KEY && !goingLeft){
+				this.speedX = 10;
+				this.speedY = 0;
+			}
+			if(keyPressed === DOWN_KEY && !goingUp){
+				this.speedX = 0;
+				this.speedY = 10;
+			}
 		}
 	}
 }
