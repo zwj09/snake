@@ -6,6 +6,7 @@
 	 <div>
 		 <button v-if="!starting" @click="startGame">开始游戏</button>
 		 <button v-else @click="pauseGame">暂停游戏</button>
+		 <button @click="reStart">重新开始</button>
 	 </div>
   </div>
 </template>
@@ -64,6 +65,10 @@ export default {
 			this.starting = false;
 			clearInterval(this.timer);
 		},
+		//重新开始
+		reStart(){
+			location.reload();
+		},
 		//蛇身体每个部分
 		drawSnakePart(snakePart){
 			this.context.fillStyle = 'lightgreen';
@@ -78,6 +83,7 @@ export default {
 		//让蛇动
 		advanceSnake(){
 			//新建一个头部，添加到this.snake中
+			let ifPop = true;
 			let head = {
 				x: this.snake[0].x+this.speedX,
 				y: this.snake[0].y+this.speedY,
@@ -87,11 +93,18 @@ export default {
 				let didEatFood = (this.snake[0].x === this.food.x)
 												 &&
 												 (this.snake[0].y === this.food.y);
+				this.foodArr.find((food,index)=>{
+					if(head.x===food.x && head.y===food.y){
+						this.foodArr.splice(index,1);
+						ifPop = false
+					}
+					return head.x===food.x && head.y===food.y;
+				})
 				if(didEatFood) {
 					//让食物随机一个位置
 					this.addFood();
 				}else{
-					this.snake.pop();
+					if(ifPop) this.snake.pop();
 				}
 				this.snake.find((body,index)=>{
 					if((head.x===body.x && head.y===body.y)&&index>2){
@@ -108,8 +121,9 @@ export default {
 			this.food.x = this.randomTen(0, this.game.width - 10);
 			this.food.y = this.randomTen(0, this.game.height - 10);
 			//判断生成的位置是否在蛇身上，如果在就重新生成
-			let ifSame = this.snake.find(body=>body.x===this.food.x && body.y===this.food.y)
-			if(ifSame) this.addFood();
+			let ifSame = this.snake.find(body=>body.x===this.food.x && body.y===this.food.y);
+			let ifFoodArr = this.foodArr.find(body=>body.x===this.food.x && body.y===this.food.y);
+			if(ifSame||ifFoodArr) this.addFood();
 		},
 		randomTen(max,min){
 			return Math.round((Math.random() * (max-min) + min) / 10) * 10;
@@ -117,7 +131,7 @@ export default {
 		//画蛇尸体
 		drawFoodArr(){
 			this.foodArr.forEach(food=>{
-				this.context.fillStyle = 'red';
+				this.context.fillStyle = 'aqua';
 				this.context.strokeStyle = 'darkred';
 				this.context.fillRect(food.x, food.y, 10, 10);
 				this.context.strokeRect(food.x, food.y, 10, 10);
@@ -125,7 +139,7 @@ export default {
 		},
 		//画食物
 		drawFood(){
-			this.context.fillStyle = 'red';
+			this.context.fillStyle = 'pink';
 			this.context.strokeStyle = 'darkred';
 			this.context.fillRect(this.food.x, this.food.y, 10, 10);
 			this.context.strokeRect(this.food.x, this.food.y, 10, 10);
