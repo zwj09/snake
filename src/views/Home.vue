@@ -4,7 +4,7 @@
 		<div>
 			当前分数是：<span v-text="score"></span>
 		</div>
-		<canvas ref="game" width={{c_width}} height="400"> </canvas>
+		<canvas ref="game" width="c_width" height="400"> </canvas>
 		<!-- 开始游戏按钮 -->
 		<div>
 			<button v-if="!starting" @click="startGame">开始游戏</button>
@@ -74,9 +74,11 @@
 			this.context.strokeRect(0, 0, this.game.width, this.game.height);
 			this.drawSnake();
 			this.addFood();
-			this.C_Width();
+			this.c_width = 400 * (this.C_Width());
+			// let c_width = 400 * (this.C_Width());
 			console.log(this.screenWidth);
 			console.log(this.C_Width());
+			// console.log(c_width);
 
 			// let bili = '';
 			// const that = this
@@ -88,7 +90,9 @@
 			// }
 
 		},
-
+		created(){
+			this.c_width = 400 * (this.C_Width());
+		},
 		data() {
 			return {
 				snake: [{
@@ -126,17 +130,17 @@
 				score: -1,
 				screenWidth: window.innerWidth,
 				// bili: this.screenWidth ,
-				// c_width: 400 * this.bili,
+				c_width: {},
 			}
 		},
 		methods: {
 			C_Width() {
-			const bili = this.screenWidth / 375.00
-			return {
-				screenWidth: window.innerWidth,
-				bili,
-				c_width: bili * 400
-			}
+			return this.screenWidth / 375.00
+			// return {
+			// 	// screenWidth: window.innerWidth,
+			// 	// bili,
+			// 	c_width: bili * 400
+			// }
 		},
 			//开始游戏
 			startGame() {
