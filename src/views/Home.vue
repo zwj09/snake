@@ -74,18 +74,18 @@
 			this.context.strokeRect(0, 0, this.game.width, this.game.height);
 			this.drawSnake();
 			this.addFood();
-			let bili = this.screenWidth;
+			this.C_Width();
 			console.log(this.screenWidth);
-			console.log(this.bili);
+			console.log(this.C_Width());
 
 			// let bili = '';
-			const that = this
-			window.onresize = () => {
-				return (() => {
-					window.screenWidth = document.body.clientWidth;
-					that.screenWidth = window.screenWidth;
-				})();
-			}
+			// const that = this
+			// window.onresize = () => {
+			// 	return (() => {
+			// 		window.screenWidth = document.body.clientWidth;
+			// 		that.screenWidth = window.screenWidth;
+			// 	})();
+			// }
 
 		},
 
@@ -126,15 +126,18 @@
 				score: -1,
 				screenWidth: window.innerWidth,
 				// bili: this.screenWidth ,
-				c_width: 400 * this.bili,
+				// c_width: 400 * this.bili,
 			}
 		},
 		methods: {
-			// screenWidth(val) {
-			// 	// this.screenWidth = val;
-			// 	// this.bili = this.screenWidth / 375.0;
-			// 	console.log("this.screenWidth", this.screenWidth);
-			// },
+			C_Width() {
+			const bili = this.screenWidth / 375.00
+			return {
+				screenWidth: window.innerWidth,
+				bili,
+				c_width: bili * 400
+			}
+		},
 			//开始游戏
 			startGame() {
 				this.starting = true;
