@@ -4,7 +4,7 @@
 		<div>
 			当前分数是：<span v-text="score"></span>
 		</div>
-		<canvas ref="game" width="c_width" height="400"> </canvas>
+		<canvas ref="game" id="c_wh"> </canvas>
 		<!-- 开始游戏按钮 -->
 		<div>
 			<button v-if="!starting" @click="startGame">开始游戏</button>
@@ -59,6 +59,7 @@
 
 <script>
 	export default {
+		
 		mounted() {
 			//监听键盘事件
 			document.addEventListener("keydown", this.changeDirection);
@@ -68,30 +69,20 @@
 			this.game = this.$refs.game;
 			this.context = this.game.getContext('2d');
 			//画布
+			const c = document.getElementById("c_wh");
+			c.width = this.C_Width() * 400;
+			c.height = this.C_Height() * 400;
+			console.log(c);
 			this.context.fillStyle = CANVAS_BACKGROUND_COLOR;
 			this.context.strokeStyle = CANVAS_BORDER_COLOR;
 			this.context.fillRect(0, 0, this.game.width, this.game.height);
 			this.context.strokeRect(0, 0, this.game.width, this.game.height);
 			this.drawSnake();
 			this.addFood();
-			this.c_width = 400 * (this.C_Width());
-			// let c_width = 400 * (this.C_Width());
 			console.log(this.screenWidth);
 			console.log(this.C_Width());
-			// console.log(c_width);
-
-			// let bili = '';
-			// const that = this
-			// window.onresize = () => {
-			// 	return (() => {
-			// 		window.screenWidth = document.body.clientWidth;
-			// 		that.screenWidth = window.screenWidth;
-			// 	})();
-			// }
-
-		},
-		created(){
-			this.c_width = 400 * (this.C_Width());
+			
+		
 		},
 		data() {
 			return {
@@ -135,13 +126,11 @@
 		},
 		methods: {
 			C_Width() {
-			return this.screenWidth / 375.00
-			// return {
-			// 	// screenWidth: window.innerWidth,
-			// 	// bili,
-			// 	c_width: bili * 400
-			// }
-		},
+				return this.screenWidth / 500.00
+			},
+			C_Height() {
+				return this.screenWidth / 500.00
+			},
 			//开始游戏
 			startGame() {
 				this.starting = true;
